@@ -143,31 +143,7 @@ export default function Scene3BookDetail({
             <p className="book-sheet-why-text">{book.pourquoiLire}</p>
           </div>
 
-          {/* Liens externes */}
-          {(book.lienMAL || book.lienAmazon) && (
-            <div className="book-sheet-links">
-              {book.lienMAL && (
-                <a
-                  href={book.lienMAL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="book-sheet-link"
-                >
-                  MyAnimeList ↗
-                </a>
-              )}
-              {book.lienAmazon && (
-                <a
-                  href={book.lienAmazon}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="book-sheet-link"
-                >
-                  Amazon ↗
-                </a>
-              )}
-            </div>
-          )}
+          {/* Liens externes supprimés */}
         </div>
       </div>
     </section>
