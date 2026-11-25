@@ -81,7 +81,11 @@ export default function LibraryStory({
     [books],
   )
 
-  const finaleSelection = useMemo(() => books.slice(0, 6), [books])
+  const finaleRowOne = useMemo(() => books, [books])
+  const finaleRowTwo = useMemo(
+    () => [...books.slice(5), ...books.slice(0, 5)],
+    [books],
+  )
 
   useEffect(() => {
     const root = rootRef.current
@@ -266,31 +270,76 @@ export default function LibraryStory({
         </div>
       </section>
 
-      {/* 4. Sélection finale de couvertures & retour à l'étagère */}
+      {/* 4. Sélection finale de couvertures (2 rangées opposées) & retour à l'étagère */}
       <section className="story-section story-finale" aria-label="Explorer la bibliothèque">
         <div className="story-finale-inner">
           <p className="story-eyebrow">Prêt à choisir ?</p>
           <h2 className="story-headline">Prends un tome en main</h2>
 
-          <div className="story-cover-fan">
-            {finaleSelection.map((book, idx) => (
-              <button
-                key={book.id}
-                type="button"
-                className="story-fan-card"
-                style={{ '--fan-i': idx } as React.CSSProperties}
-                onClick={() => onSelectBook(book)}
-                aria-label={`Ouvrir ${book.titre}`}
-              >
-                <img
-                  src={book.couverture}
-                  alt={book.titre}
-                  width={640}
-                  height={960}
-                  loading="lazy"
-                />
-              </button>
-            ))}
+          <div className="story-marquees">
+            {/* Rangée 1 : défilement gauche -> droite */}
+            <div className="story-marquee-row" aria-label="Première rangée de couvertures">
+              <div className="story-marquee-track story-marquee-ltr">
+                {[0, 1].map((dup) => (
+                  <div
+                    key={dup}
+                    className="story-marquee-group"
+                    aria-hidden={dup === 1 || undefined}
+                  >
+                    {finaleRowOne.map((book) => (
+                      <button
+                        key={`r1-${dup}-${book.id}`}
+                        type="button"
+                        className="story-marquee-card"
+                        tabIndex={dup === 1 ? -1 : undefined}
+                        onClick={() => onSelectBook(book)}
+                        aria-label={dup === 0 ? `Ouvrir ${book.titre}` : undefined}
+                      >
+                        <img
+                          src={book.couverture}
+                          alt={dup === 0 ? book.titre : ''}
+                          width={640}
+                          height={960}
+                          loading="lazy"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Rangée 2 : défilement droite -> gauche */}
+            <div className="story-marquee-row" aria-label="Seconde rangée de couvertures">
+              <div className="story-marquee-track story-marquee-rtl">
+                {[0, 1].map((dup) => (
+                  <div
+                    key={dup}
+                    className="story-marquee-group"
+                    aria-hidden={dup === 1 || undefined}
+                  >
+                    {finaleRowTwo.map((book) => (
+                      <button
+                        key={`r2-${dup}-${book.id}`}
+                        type="button"
+                        className="story-marquee-card"
+                        tabIndex={dup === 1 ? -1 : undefined}
+                        onClick={() => onSelectBook(book)}
+                        aria-label={dup === 0 ? `Ouvrir ${book.titre}` : undefined}
+                      >
+                        <img
+                          src={book.couverture}
+                          alt={dup === 0 ? book.titre : ''}
+                          width={640}
+                          height={960}
+                          loading="lazy"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           <button
